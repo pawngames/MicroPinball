@@ -1,0 +1,48 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/3d/models/bumper_player.fbx" type="PackedScene" id=1]
+[ext_resource path="res://src/table/bumper_player.gd" type="Script" id=2]
+[ext_resource path="res://assets/sound/sfx/bumper_player.ogg" type="AudioStream" id=3]
+
+[sub_resource type="SpatialMaterial" id=1]
+
+[sub_resource type="BoxShape" id=2]
+extents = Vector3( 2.2, 1, 0.2 )
+
+[sub_resource type="CylinderShape" id=3]
+radius = 1.03696
+
+[sub_resource type="BoxShape" id=4]
+margin = 0.1
+extents = Vector3( 2.1, 1, 0.4 )
+
+[node name="bumper_player" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="Cube2" parent="." index="0"]
+material_override = SubResource( 1 )
+
+[node name="StaticBody" type="StaticBody" parent="Cube2" index="0"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Cube2/StaticBody" index="0"]
+transform = Transform( 0.981283, 0, -0.192573, 0, 1, 0, 0.192573, 0, 0.981283, 2.6, 1, -0.4 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="Cube2/StaticBody" index="1"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0 )
+shape = SubResource( 3 )
+
+[node name="Area" type="Area" parent="Cube2" index="1"]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape" type="CollisionShape" parent="Cube2/Area" index="0"]
+transform = Transform( 0.98178, 0, -0.190021, 0, 1, 0, 0.190021, 0, 0.98178, 2.7, 1.1, -0.6 )
+shape = SubResource( 4 )
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." index="1"]
+stream = ExtResource( 3 )
+unit_db = 5.0
+unit_size = 2.0
+[connection signal="body_entered" from="Cube2/Area" to="." method="_on_Area_body_entered"]
+[connection signal="body_exited" from="Cube2/Area" to="." method="_on_Area_body_exited"]

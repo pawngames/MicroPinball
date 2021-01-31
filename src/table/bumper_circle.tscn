@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://src/table/bumper_circle.gd" type="Script" id=1]
+[ext_resource path="res://assets/3d/models/bumper_short.fbx" type="PackedScene" id=2]
+[ext_resource path="res://assets/sound/sfx/bell.ogg" type="AudioStream" id=3]
+
+[sub_resource type="CylinderMesh" id=1]
+
+[sub_resource type="CylinderShape" id=2]
+
+[sub_resource type="CylinderShape" id=3]
+margin = 0.1
+radius = 1.3
+
+[node name="bumper_circle" instance=ExtResource( 2 )]
+script = ExtResource( 1 )
+
+[node name="MeshInstance" type="MeshInstance" parent="." index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+mesh = SubResource( 1 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="MeshInstance" index="0"]
+
+[node name="CollisionShape" type="CollisionShape" parent="MeshInstance/StaticBody" index="0"]
+shape = SubResource( 2 )
+
+[node name="Area" type="Area" parent="MeshInstance" index="1"]
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape" type="CollisionShape" parent="MeshInstance/Area" index="0"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.96046e-08 )
+shape = SubResource( 3 )
+
+[node name="Cube002" parent="." index="1"]
+visible = false
+
+[node name="OmniLight" type="OmniLight" parent="." index="2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0 )
+light_color = Color( 0.00784314, 1, 0.490196, 1 )
+light_energy = 2.0
+shadow_enabled = true
+
+[node name="Tween" type="Tween" parent="OmniLight" index="0"]
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." index="3"]
+stream = ExtResource( 3 )
+unit_db = 5.0
+unit_size = 2.0
+pitch_scale = 2.0
+[connection signal="body_entered" from="MeshInstance/Area" to="." method="_on_Area_body_entered"]
